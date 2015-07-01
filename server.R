@@ -67,8 +67,7 @@ DT::datatable(rownames=TRUE,selection='single')
    
  })
  
- 
- output$playerTable <- DT::renderDataTable({ 
+ playerData <- reactive({ 
    
    print(input$table_rows_selected)
    if(is.null(input$table_rows_selected)) return()
@@ -80,16 +79,50 @@ DT::datatable(rownames=TRUE,selection='single')
    thePlayer <- theData()$res[s,]$player
    print(thePlayer)
    
-pfa %>% 
+   res <-   pfa %>% 
      filter(player==thePlayer) %>% 
-     select(season,team,tier)   %>% 
-     DT::datatable(rownames = FALSE,options= list(paging = FALSE, searching = FALSE,info=FALSE))
+     select(season,team,tier)  
+   
+   info=list(res=res)
+   return(info)
    
    
+ })
+ 
+ 
+ 
+ output$playerTable <- DT::renderDataTable({ 
+
+   playerData()$res %>% 
+     DT::datatable(rownames=TRUE,selection='single',options= list(paging = FALSE, searching = FALSE,info=FALSE,
+                                                                  columnDefs = list(list(targets = c(0), visible = FALSE))))
+#DT::datatable(rownames=TRUE,selection='single',options= list(paging = FALSE, searching = FALSE,info=FALSE))
+                                                                 
+ 
+ })
+ 
+
+ output$seasonTier <- DT::renderDataTable({ 
    
-#    df %>%  
-#      DT::datatable(rownames=TRUE,selection='single',options= list(pageLength=10,
-#                                                                   paging = TRUE, searching = TRUE,info=FALSE))
+   print(input$playerTable_rows_selected)
+   if(is.null(input$playerTable_rows_selected)) return()
+   
+   s = as.integer(input$playerTable_rows_selected)
+   
+   print(s)
+   
+   theSeason <- playerData()$res[s,]$season
+   theTier <- playerData()$res[s,]$tier
+   
+   pfa %>% 
+     filter(season==theSeason&tier==theTier) %>% 
+     select(player,pos,team)   %>% 
+     arrange(team) %>% 
+     DT::datatable(rownames=FALSE,options= list(paging = FALSE, searching = FALSE,info=FALSE))
+                                                                  
+   
+    
+   
  })
  
  
