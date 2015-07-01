@@ -49,6 +49,11 @@ dashboardPage(skin="green",
   fluidRow(
     box(
       DT::dataTableOutput("table")
+     
+    ),
+    box( width=4,
+      DT::dataTableOutput("playerTable")
+      
     )
   )
 ) 
