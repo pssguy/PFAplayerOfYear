@@ -41,11 +41,16 @@ dashboardPage(skin="green",
       div(style="display:inline-block",selectInput("team","Team",c("All",teamChoice), width = 180)),
       div(style="display:inline-block",selectInput("country","Country",c("All",countryChoice), width = 180)),
       div(style="display:inline-block",selectInput("tier","Tier",c("All",1,2,3,4), width = 80)),
-      div(style="display:inline-block",selectInput("position","Tier",c("All","GK","DF","MF","FW"), width = 80)),
+      div(style="display:inline-block",selectInput("position","Position",c("All","GK","DF","MF","FW"), width = 80)),
      # div(style="display:inline-block",sliderInput("year","Year(s)",min=1973,max=2014,value=c(1992,2014),sep="", width=200))
      sliderInput("year","Year(s)",min=1973,max=2014,value=c(1992,2014),sep="", width=200)
      )
-)
+),
+  fluidRow(
+    box(
+      DT::dataTableOutput("table")
+    )
+  )
 ) 
        
         
